@@ -6,6 +6,8 @@ import com.manage.carrive.response.DriverResponse;
 import com.manage.carrivedriver.security.JwtRequestFilter;
 import com.manage.carrivedriver.service.api.CarriveDriverServiceApi;
 import com.manage.carriveutility.repository.DriverRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
+
+    private final Logger logger = LoggerFactory.getLogger(CarriveDriverServiceImpl.class);
 
     @Autowired
     private DriverRepository driverRepository;
@@ -47,6 +51,7 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
             return new ResponseEntity<>(driverResponse, HttpStatus.OK);
 
         }catch (Exception e){
+            logger.error(e.getMessage());
             driverResponse.setCode(CodeResponseEnum.CODE_ERROR.getCode());
             driverResponse.setMessage(e.getMessage());
             driverResponse.setData(null);

@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 // dont authenticate this particular request
-                .authorizeHttpRequests().requestMatchers("/auth/**", "/v3/api-docs", "/swagger-ui/**").permitAll().
+                .authorizeHttpRequests().requestMatchers("/v3/api-docs", "/swagger-ui/**").permitAll().
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to
