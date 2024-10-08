@@ -59,27 +59,4 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
             return new ResponseEntity<>(driverResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @Override
-    public ResponseEntity<DriverResponse> sendDocumentPersonal(MultipartFile driverLicense, MultipartFile proofIdentity) {
-        DriverResponse driverResponse = new DriverResponse();
-        try {
-
-            Driver driver = JwtRequestFilter.driver;
-            if (driver == null) {
-                driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
-                driverResponse.setMessage("driver is null");
-                driverResponse.setData(null);
-                return new ResponseEntity<>(driverResponse, HttpStatus.OK);
-            }
-
-
-        }catch (Exception e){
-            logger.error(e.getMessage());
-            driverResponse.setCode(CodeResponseEnum.CODE_ERROR.getCode());
-            driverResponse.setMessage(e.getMessage());
-            driverResponse.setData(null);
-            return new ResponseEntity<>(driverResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }
