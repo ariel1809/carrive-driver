@@ -3,8 +3,8 @@ package com.manage.carrivedriver.service.impl;
 import com.manage.carrive.dto.ItineraryDto;
 import com.manage.carrive.entity.Driver;
 import com.manage.carrive.entity.Itinerary;
-import com.manage.carrive.entity.Package;
 import com.manage.carrive.enumeration.CodeResponseEnum;
+import com.manage.carrive.enumeration.StatusItineraryEnum;
 import com.manage.carrive.response.DriverResponse;
 import com.manage.carrivedriver.security.JwtRequestFilter;
 import com.manage.carrivedriver.service.api.CarriveDriverServiceApi;
@@ -17,12 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 
 @Service
 public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
 
     private final Logger logger = LoggerFactory.getLogger(CarriveDriverServiceImpl.class);
+    private final ZoneId zoneId = ZoneId.systemDefault();
 
     @Autowired
     private DriverRepository driverRepository;
@@ -112,11 +117,17 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
 
                 itinerarySaved  = new Itinerary();
                 itinerarySaved.setCreatedBy(driver);
+                itinerarySaved.setCreatedAt(LocalDateTime.now(zoneId));
+                itinerarySaved.setStartDate(itinerary.getStartDate());
+                itinerarySaved.setStartTime(itinerary.getStartTime());
                 itinerarySaved.setCapacity(itinerary.getCapacity());
                 itinerarySaved.setAcceptedPackage(itinerary.getAcceptedPackage());
                 itinerarySaved.setStartCity(itinerary.getStartCity());
                 itinerarySaved.setDestinationCity(itinerary.getDestinationCity());
                 itinerarySaved.setStartDate(itinerary.getStartDate());
+                itinerarySaved.setTariff(itinerary.getTariff());
+                itinerarySaved.setIsPublished(itinerary.getIsPublished());
+                itinerarySaved.setStatus(StatusItineraryEnum.PENDING);
                 itinerarySaved = itineraryRepository.save(itinerarySaved);
             }else {
                 driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
