@@ -18,9 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 
 @Service
@@ -115,19 +113,20 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
                     return new ResponseEntity<>(driverResponse, HttpStatus.OK);
                 }
 
-                itinerarySaved  = new Itinerary();
+                itinerarySaved = new Itinerary();
                 itinerarySaved.setCreatedBy(driver);
                 itinerarySaved.setCreatedAt(LocalDateTime.now(zoneId));
                 itinerarySaved.setStartDate(itinerary.getStartDate());
                 itinerarySaved.setStartTime(itinerary.getStartTime());
                 itinerarySaved.setCapacity(itinerary.getCapacity());
+                itinerarySaved.setDistance(itinerary.getDistance());
                 itinerarySaved.setAcceptedPackage(itinerary.getAcceptedPackage());
                 itinerarySaved.setStartCity(itinerary.getStartCity());
                 itinerarySaved.setDestinationCity(itinerary.getDestinationCity());
                 itinerarySaved.setStartDate(itinerary.getStartDate());
                 itinerarySaved.setTariff(itinerary.getTariff());
                 itinerarySaved.setIsPublished(itinerary.getIsPublished());
-                itinerarySaved.setStatus(StatusItineraryEnum.PENDING);
+                itinerarySaved.setStatus(StatusItineraryEnum.CREATED);
                 itinerarySaved = itineraryRepository.save(itinerarySaved);
             }else {
                 driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
