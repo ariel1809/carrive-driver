@@ -34,24 +34,6 @@ public class DriverController {
         return service.createItinerary(itinerary);
     }
 
-    // Méthode pour créer les en-têtes avec le token
-    private HttpHeaders createHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", token);
-        return headers;
-    }
-
-    // Méthode pour envoyer la requête et formater la réponse
-    private ResponseEntity<MessageResponse> sendRequest(String url, HttpEntity<?> entity) {
-        try {
-            ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, entity, Object.class);
-            return ResponseEntity.ok(new MessageResponse("success", response.getStatusCodeValue(), response.getBody()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("Erreur lors de la requête", HttpStatus.INTERNAL_SERVER_ERROR.value(), null));
-        }
-    }
-
     @PostMapping("init-conversation")
     private ResponseEntity<MessageResponse> initConversation(@RequestParam("id_receiver") String idReceiver) {
         String url = "http://localhost:8086/message/init-conversation?id_receiver=" + idReceiver;
@@ -79,5 +61,23 @@ public class DriverController {
     @PostMapping("list-users")
     private ResponseEntity<DriverResponse> listUsers() {
         return service.listAllUsers();
+    }
+
+    // Méthode pour créer les en-têtes avec le token
+    private HttpHeaders createHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", token);
+        return headers;
+    }
+
+    // Méthode pour envoyer la requête et formater la réponse
+    private ResponseEntity<MessageResponse> sendRequest(String url, HttpEntity<?> entity) {
+        try {
+            ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, entity, Object.class);
+            return ResponseEntity.ok(new MessageResponse("success", response.getStatusCodeValue(), response.getBody()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MessageResponse("Erreur lors de la requête", HttpStatus.INTERNAL_SERVER_ERROR.value(), null));
+        }
     }
 }
