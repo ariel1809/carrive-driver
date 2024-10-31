@@ -61,10 +61,10 @@ public class DriverController {
 
     @PostMapping("send-message")
     private ResponseEntity<MessageResponse> sendMessage(
-            @RequestParam("idConversation") String idConversation,
+            @RequestParam("id_conversation") String idConversation,
             @RequestBody MessageDto message) {
 
-        String url = "http://localhost:8086/message/send-message?idConversation=" + idConversation;
+        String url = "http://localhost:8086/message/send-message?id_conversation=" + idConversation;
         HttpEntity<MessageDto> entity = new HttpEntity<>(message, createHeaders());
         return sendRequest(url, entity);
     }
@@ -74,5 +74,10 @@ public class DriverController {
         String url = "http://localhost:8086/message/list-conversations";
         HttpEntity<String> entity = new HttpEntity<>(createHeaders());
         return sendRequest(url, entity);
+    }
+
+    @PostMapping("list-users")
+    private ResponseEntity<DriverResponse> listUsers() {
+        return service.listAllUsers();
     }
 }

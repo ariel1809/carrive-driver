@@ -3,6 +3,7 @@ package com.manage.carrivedriver.service.impl;
 import com.manage.carrive.dto.ItineraryDto;
 import com.manage.carrive.entity.Driver;
 import com.manage.carrive.entity.Itinerary;
+import com.manage.carrive.entity.Passenger;
 import com.manage.carrive.enumeration.CodeResponseEnum;
 import com.manage.carrive.enumeration.StatusItineraryEnum;
 import com.manage.carrive.response.DriverResponse;
@@ -11,6 +12,7 @@ import com.manage.carrivedriver.service.api.CarriveDriverServiceApi;
 import com.manage.carriveutility.repository.DriverRepository;
 import com.manage.carriveutility.repository.ItineraryRepository;
 import com.manage.carriveutility.repository.PackageRepository;
+import com.manage.carriveutility.repository.PassengerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
@@ -35,6 +39,9 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
 
     @Autowired
     private PackageRepository packageRepository;
+
+    @Autowired
+    private PassengerRepository passengerRepository;
 
     @Override
     public ResponseEntity<DriverResponse> logout() {
@@ -139,6 +146,45 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
             driverResponse.setMessage("success");
             driverResponse.setData(itinerarySaved);
             return new ResponseEntity<>(driverResponse, HttpStatus.OK);
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            driverResponse.setCode(CodeResponseEnum.CODE_ERROR.getCode());
+            driverResponse.setMessage(e.getMessage());
+            driverResponse.setData(null);
+            return new ResponseEntity<>(driverResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<DriverResponse> listAllUsers() {
+        DriverResponse driverResponse = new DriverResponse();
+        try {
+
+            Driver driver = JwtRequestFilter.driver;
+            if (driver != null) {
+                List<Object> users = new ArrayList<>(); // Initialisation de la liste
+                List<Driver> drivers = driverRepository.findAll();
+                List<Passenger> passengers = passengerRepository.findAll();
+
+                users.addAll(drivers);
+                users.addAll(passengers);
+                if (users.isEmpty()){
+                    driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
+                    driverResponse.setMessage("list users is empty");
+                    driverResponse.setData(null);
+                }else {
+                    driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
+                    driverResponse.setMessage("list users");
+                    driverResponse.setData(users);
+                }
+                return new ResponseEntity<>(driverResponse, HttpStatus.OK);
+            }else {
+                driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
+                driverResponse.setMessage("driver not found");
+                driverResponse.setData(null);
+                return new ResponseEntity<>(driverResponse, HttpStatus.OK);
+            }
 
         }catch (Exception e){
             logger.error(e.getMessage());

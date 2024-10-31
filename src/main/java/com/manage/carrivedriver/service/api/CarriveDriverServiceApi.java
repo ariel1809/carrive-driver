@@ -11,4 +11,5 @@ public interface CarriveDriverServiceApi {
 
     ResponseEntity<DriverResponse> logout();
     ResponseEntity<DriverResponse> createItinerary(ItineraryDto itinerary);
+    ResponseEntity<DriverResponse> listAllUsers();
 }
