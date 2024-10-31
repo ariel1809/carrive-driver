@@ -36,7 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private DriverRepository driverRepository;
 
     public static Driver driver;
-    public static String jwtToken;
+    public static String token;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
@@ -55,9 +55,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         final String requestTokenHeader = request.getHeader("Authorization");
         String username = null;
+        String jwtToken = null;
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
+            token = jwtToken;
             try {
                 Claims claims = Jwts.parser()
                         .setSigningKey(secretKey)

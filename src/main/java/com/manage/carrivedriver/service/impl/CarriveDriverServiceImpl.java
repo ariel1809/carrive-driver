@@ -169,6 +169,7 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
 
                 users.addAll(drivers);
                 users.addAll(passengers);
+                users.remove(driver);
                 if (users.isEmpty()){
                     driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
                     driverResponse.setMessage("list users is empty");
@@ -178,13 +179,12 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
                     driverResponse.setMessage("list users");
                     driverResponse.setData(users);
                 }
-                return new ResponseEntity<>(driverResponse, HttpStatus.OK);
             }else {
                 driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
                 driverResponse.setMessage("driver not found");
                 driverResponse.setData(null);
-                return new ResponseEntity<>(driverResponse, HttpStatus.OK);
             }
+            return new ResponseEntity<>(driverResponse, HttpStatus.OK);
 
         }catch (Exception e){
             logger.error(e.getMessage());
