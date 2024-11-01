@@ -41,8 +41,6 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
     @Autowired
     private PassengerRepository passengerRepository;
 
-    @Autowired
-    private StatDriverRepository statDriverRepository;
 
     @Override
     public ResponseEntity<DriverResponse> logout() {
@@ -164,21 +162,16 @@ public class CarriveDriverServiceImpl implements CarriveDriverServiceApi {
 
             Driver driver = JwtRequestFilter.driver;
             if (driver != null) {
-                List<Object> users = new ArrayList<>(); // Initialisation de la liste
-                List<Driver> drivers = driverRepository.findAll();
                 List<Passenger> passengers = passengerRepository.findAll();
 
-                users.addAll(drivers);
-                users.addAll(passengers);
-                users.remove(driver);
-                if (users.isEmpty()){
+                if (passengers.isEmpty()){
                     driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
                     driverResponse.setMessage("list users is empty");
                     driverResponse.setData(null);
                 }else {
                     driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
                     driverResponse.setMessage("list users");
-                    driverResponse.setData(users);
+                    driverResponse.setData(passengers);
                 }
             }else {
                 driverResponse.setCode(CodeResponseEnum.CODE_NULL.getCode());
